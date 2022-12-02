@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/assets/style.css" />
-    <link rel="stylesheet" href="/assets/lib/modal/dialog.css" />
+    <link rel="stylesheet" href="/lib/modal/dialog.css" />
     <title>Document</title>
   </head>
   <body>
@@ -54,7 +54,7 @@
           <!-- Tela de cadastro -->
           <div class="subscription view" id="view-subscription">
             <h2>Inscrever-se</h2>
-            <form class="subscription-form">
+            <form class="subscription-form" action="POST">
               <div class="field">
                 <label for="nome">Nome completo</label>
                 <input name="nome" type="text" />
@@ -81,9 +81,9 @@
               </div>
 
               <!-- inputs escondidas, os valores das inputs dos modais são copiadas aqui para a submissão do formulário -->
-              <input type="text" name="email" class="hidden">
-              <input type="text" name="telefone" class="hidden">
-              <input type="text" name="modalidade" class="hidden">
+              <input type="text" name="email" class="hidden" />
+              <input type="text" name="telefone" class="hidden" />
+              <input type="text" name="modalidade" class="hidden" />
 
               <button class="register">Continuar <i class="icon next-white"></i></button>
             </form>
@@ -144,9 +144,10 @@
       </div>
     </div>
 
-    <script src="/assets/lib/formatos.js"></script>
-    <script src="/assets/lib/modal/dialog.js"></script>
-    
+    <script src="/js/validacao.js"></script>
+    <script src="/js/formatos.js"></script>
+    <script src="/lib/modal/dialog.js"></script>
+
     <script>
       // Alias para querySelector e querySelectorAll
       const $ = document.querySelector.bind(document);
@@ -165,26 +166,6 @@
         loginPane.classList.toggle("hidden", currentView === "subscription");
       }
 
-      function cpf(cpf) {
-        cpf = cpf.replace(/\D/g, "");
-        if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-        var result = true;
-        [9, 10].forEach(function (j) {
-          var soma = 0,
-            r;
-          cpf
-            .split(/(?=)/)
-            .splice(0, j)
-            .forEach(function (e, i) {
-              soma += parseInt(e) * (j + 2 - (i + 1));
-            });
-          r = soma % 11;
-          r = r < 2 ? 0 : 11 - r;
-          if (r != cpf.substring(j, j + 1)) result = false;
-        });
-        return result;
-      }
-
       function validarEtapa1() {
         function isValidDate(d) {
           return d instanceof Date && !isNaN(d);
@@ -192,9 +173,10 @@
 
         if ($("[name='nome']").value.length < 1) return "O campo de nome deve ser preenchido.";
         if (cpf($("[name='cpf']").value) == false) return "O CPF dado é inválido.";
-        if (!isValidDate(new Date($("[name='dataNascimento']").value))) return "A data de nascimento é inválida.";
-          // Ao chegar aqui, todas as entradas foram aprovadas.
-          return true;
+        if (!isValidDate(new Date($("[name='dataNascimento']").value)))
+          return "A data de nascimento é inválida.";
+        // Ao chegar aqui, todas as entradas foram aprovadas.
+        return true;
       }
 
       function validarEtapa2() {
@@ -265,8 +247,10 @@
 
       function submitRegistrationForm() {
         $(".subscription-form [name='email']").value = $(".modal [name='email']").value;
-        $(".subscription-form [name='telefone']").value =  limparNumeros($(".modal [name='telefone']").value);
-        $(".subscription-form [name='modalidade']").value =  $(".modal [name='modalidade']").value;
+        $(".subscription-form [name='telefone']").value = limparNumeros(
+          $(".modal [name='telefone']").value,
+        );
+        $(".subscription-form [name='modalidade']").value = $(".modal [name='modalidade']").value;
 
         $(".subscription-form").submit();
       }

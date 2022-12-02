@@ -1,7 +1,7 @@
 <?php
 namespace Database;
 
-$pdo = new \PDO("sqlite:" . __DIR__ . "/../../database.sqlite");
+$pdo = new \PDO("sqlite:/data/database.sqlite");
 
 // Inicializar banco de dados
 if ($pdo->beginTransaction()) {
