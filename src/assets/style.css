@@ -205,6 +205,13 @@ a:active {
   height: 16px;
   background-size: 16px 16px;
   background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icon.icon-2x {
+  width: 32px;
+  height: 32px;
+  background-size: 32px 32px;
 }
 
 .icon.file {
@@ -212,6 +219,18 @@ a:active {
 }
 .icon.next-white {
   background-image: url("/assets/icons/NextWhite.svg");
+}
+.icon.user {
+  background-image: url("/assets/icons/User.svg");
+}
+.icon.user-white {
+  background-image: url("/assets/icons/UserWhite.svg");
+}
+.icon.prova {
+  background-image: url("/assets/icons/DictionaryWhite.svg");
+}
+.icon.exit {
+  background-image: url("/assets/icons/PreviousWhite.svg");
 }
 
 button {
@@ -392,6 +411,62 @@ select {
   background-image: url("/assets/icons/icons8-youtube.svg");
 }
 
+.split-pane.participante .sidebar-pane {
+  width: 300px;
+  background-color: #403f82;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.sidebar-pane .header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sidebar-pane .header .icon {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  box-sizing: content-box;
+  margin-right: 0.75rem;
+  border-radius: 8px;
+}
+
+.sidebar-pane .item {
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.sidebar-pane .item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-pane .item.exit {
+  margin-top: 1rem;
+}
+
+.sidebar-pane .item .icon {
+  margin-right: 12px;
+}
+
+.sidebar-pane .header .user-name {
+  font-size: 1.25rem;
+}
+
+.split-pane.participante  .multiview-pane {
+  background-color: white;
+  padding: 2rem;
+  flex-grow: 1;
+}
+
 @media screen and (max-width: 720px) {
   #menuPrincipal .branding {
     width: 100vw;
@@ -410,6 +485,10 @@ select {
   .split-pane .pane {
     max-height: none;
     height: unset;
+    width: 100%;
+  }
+  
+  .split-pane.participante .sidebar-pane  {
     width: 100%;
   }
 }
