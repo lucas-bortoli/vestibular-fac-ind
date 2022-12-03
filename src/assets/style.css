@@ -136,7 +136,7 @@ a:active {
 .split-pane .pane {
   padding: 2rem;
   height: 80vh;
-  max-height: 550px;
+  max-height: 520px;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -172,7 +172,8 @@ a:active {
   flex-direction: column;
 }
 
-.split-pane .subscription, .split-pane .login {
+.split-pane .subscription,
+.split-pane .login {
   display: flex;
   flex-direction: column;
 }
@@ -242,7 +243,6 @@ button.register {
   background-color: #ea8962;
   width: 100%;
   position: relative;
-  margin-top: 2rem;
 }
 
 button.register .icon {
@@ -255,7 +255,7 @@ button.goToLogin {
   color: white;
   border: 1px solid white;
   position: relative;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 button.goToLogin .icon {
@@ -278,53 +278,34 @@ button.goToSubscription .icon {
 }
 
 select,
-input[type="text"], input[type="email"], input[type="date"] {
+input[type="text"] {
   border-radius: 6px;
   padding: 0.5rem;
   border: none;
   font-family: inherit;
   background-color: white;
-  position: relative;
 }
 
-select:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="text"]:focus {
+select:focus,
+input[type="text"]:focus {
   background-color: #f0f0f0;
 }
 
-
-input[type="date"] {
-  appearance: none;
-  background-image: url("/assets/Time.svg");
-  background-repeat: no-repeat;
-  background-size: 16px;
-  background-position: calc(100% - 1em) calc(50% + 1px);
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  background: transparent;
-  bottom: 0;
-  color: transparent;
-  cursor: pointer;
-  height: auto;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: auto;
-}
-
-.subscription-form, .login-form {
+.subscription-form,
+.login-form {
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 1rem;
 }
 
-.subscription-form label, .login-form label {
+.subscription-form label,
+.login-form label {
   font-size: 0.8rem;
 }
 
-.subscription-form .field, .login-form .field {
+.subscription-form .field,
+.login-form .field {
   display: flex;
   flex-direction: column;
   margin-bottom: 0.4rem;
@@ -354,6 +335,7 @@ select {
   font-family: inherit;
   appearance: none;
   resize: none;
+  border-radius: 6px;
 }
 
 :is(input:not([type="checkbox"]), textarea, select):focus {
@@ -367,6 +349,47 @@ select {
   background-repeat: no-repeat;
   background-size: 1em;
   background-position: calc(100% - 1em) calc(50% + 2px);
+}
+
+.socialMediaIcons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.socialMediaIcons .icon {
+  width: 36px;
+  height: 36px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 36px;
+  color: transparent;
+  display: inline-block;
+  opacity: 0.4;
+  transition: opacity 50ms ease-in-out;
+  margin: 0 6px;
+  font-size: 1px;
+  user-select: none;
+}
+
+.socialMediaIcons .icon:hover {
+  opacity: 0.5;
+}
+
+.socialMediaIcons .icon.linkedin {
+  background-image: url("/assets/icons/icons8-linkedin.svg");
+}
+
+.socialMediaIcons .icon.facebook {
+  background-image: url("/assets/icons/icons8-facebook.svg");
+}
+
+.socialMediaIcons .icon.instagram {
+  background-image: url("/assets/icons/icons8-instagram.svg");
+}
+
+.socialMediaIcons .icon.youtube {
+  background-image: url("/assets/icons/icons8-youtube.svg");
 }
 
 @media screen and (max-width: 720px) {
