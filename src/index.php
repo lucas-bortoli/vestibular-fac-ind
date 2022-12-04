@@ -1,4 +1,8 @@
-<?php echo file_get_contents(__DIR__ . "/_partials/header.html") ?>
+<?php
+use Database\CursoController;
+
+echo file_get_contents(__DIR__ . "/_partials/header.html")
+?>
 
 <main class="main">
   <section class="split-pane">
@@ -37,7 +41,7 @@
       <!-- Tela de cadastro -->
       <div class="subscription view" id="view-subscription">
         <h2>Inscrever-se</h2>
-        <form class="subscription-form" action="POST">
+        <form class="subscription-form" method="post" action="/participante/register.php">
           <div class="field">
             <label for="nome">Nome completo</label>
             <input name="nome" type="text" />
@@ -55,12 +59,11 @@
 
           <div class="field">
             <label for="curso">Primeira opção de curso</label>
-            <select name="curso">
-              <option>Automação Industrial</option>
-              <option>Engenharia de Software</option>
-              <option>Engenharia Elétrica</option>
-              <option>Engenharia Mecânica</option>
-            </select>
+
+            <!-- Valores populados pelos scripts -->
+            <select name="curso" id="cursoSelect"></select>
+
+            <label style="margin-top: 0.5rem" id="campusIndicator">Campus: LONDRINA</label>
           </div>
 
           <!-- inputs escondidas, os valores das inputs dos modais são copiadas aqui para a submissão do formulário -->
@@ -77,15 +80,16 @@
       <div class="login view hidden" id="view-login">
         <h2>Login</h2>
 
-        <form class="login-form">
+        <form class="login-form" method="post" action="/participante/login.php">
           <div class="field">
-            <label for="documento">Documento</label>
-            <input name="documento" type="text" />
+            <label for="cpf">CPF</label>
+            <input name="cpf" type="text" value="   .   .   -  " />
           </div>
           <div class="field">
-            <label for="documento">Data de nascimento</label>
-            <input name="documento" type="text" />
+            <label for="dataNascimento">Data de nascimento</label>
+            <input name="dataNascimento" type="date" />
           </div>
+          <button class="login">Continuar <i class="icon next-white"></i></button>
         </form>
 
         <button class="goToSubscription">Não estou inscrito <i class="icon next-white"></i></button>
@@ -143,13 +147,11 @@
   }
 
   function validarEtapa1() {
-    function isValidDate(d) {
-      return d instanceof Date && !isNaN(d);
-    }
+
 
     if ($("[name='nome']").value.length < 1) return "O campo de nome deve ser preenchido.";
-    if (cpf($("[name='cpf']").value) == false) return "O CPF dado é inválido.";
-    if (!isValidDate(new Date($("[name='dataNascimento']").value)))
+    if (Validacao.cpf($("[name='cpf']").value) == false) return "O CPF dado é inválido.";
+    if (!Validacao.dateIsValid(new Date($("[name='dataNascimento']").value)))
       return "A data de nascimento é inválida.";
     // Ao chegar aqui, todas as entradas foram aprovadas.
     return true;
@@ -168,22 +170,30 @@
   }
 
   // Formatar campos de texto
-  $("[name='cpf'").addEventListener("focus", (event) => {
+  $("#view-subscription [name='cpf']").addEventListener("focus", (event) => {
     event.target.value = limparNumeros(event.target.value);
   });
-  $("[name='cpf']").addEventListener("blur", (event) => {
+  $("#view-subscription [name='cpf']").addEventListener("blur", (event) => {
     event.target.value = formatarCpf(event.target.value).formato;
   });
 
-  $("[name='telefone'").addEventListener("focus", (event) => {
+  $("#view-login [name='cpf']").addEventListener("focus", (event) => {
     event.target.value = limparNumeros(event.target.value);
   });
-  $("[name='telefone']").addEventListener("blur", (event) => {
+  $("#view-login [name='cpf']").addEventListener("blur", (event) => {
+    event.target.value = formatarCpf(event.target.value).formato;
+  });
+
+  $(".modal [name='telefone']").addEventListener("focus", (event) => {
+    event.target.value = limparNumeros(event.target.value);
+  });
+  $(".modal [name='telefone']").addEventListener("blur", (event) => {
     event.target.value = formatarNumeroCelular(event.target.value).formato;
   });
 
   // Limitar data de nascimento para o momento de agora
-  $("[name='dataNascimento']").max = new Date().toISOString().split("T")[0];
+  $("#view-subscription [name='dataNascimento']").max = new Date().toISOString().split("T")[0];
+  $("#view-login [name='dataNascimento']").max = new Date().toISOString().split("T")[0];
 
   $(".goToLogin").addEventListener("click", switchView);
   $(".goToSubscription").addEventListener("click", switchView);
@@ -230,6 +240,80 @@
 
     $(".subscription-form").submit();
   }
+</script>
+
+<script>
+// Handler de erros do cadastro
+const url = new URL(location.href);
+const error = url.searchParams.get("error");
+
+switch (error) {
+  case "cpf":
+    Dialog.show({
+      icon: "error",
+      hideCloseButton: true,
+      title: "Verifique os dados digitados.",
+      message: "O CPF dado é inválido.",
+    });
+    break;
+  case "telefone":
+    Dialog.show({
+      icon: "error",
+      hideCloseButton: true,
+      title: "Verifique os dados digitados.",
+      message: "O telefone dado é inválido.",
+    });
+    break;
+  case "registerError":
+    Dialog.show({
+      icon: "warn",
+      hideCloseButton: true,
+      title: "Já cadastrado",
+      message: "Você já está cadastrado neste processo seletivo.",
+    });
+    break;
+}
+</script>
+
+<script>
+  const cursos = <?php
+  // Gerar uma lista de cursos disponíveis
+  require_once(__DIR__ . "/_db/database.php");
+  $cursoController = new CursoController($pdo);
+  $cursos = $cursoController->listAllWithCampus();
+  // Emitir dados para o javascript
+  echo json_encode($cursos);
+  ?>;
+
+  console.log(cursos);
+
+  // Agrupar cursos por campus
+  const cursosPorCampus = {};
+  for (const curso of cursos) {
+    if (!cursosPorCampus[curso.campusNome]) {
+      cursosPorCampus[curso.campusNome] = [];
+    }
+
+    cursosPorCampus[curso.campusNome].push(curso);
+  }
+
+  // Adicionar no <select> os cursos, com seus campus como categoria
+  const cursoSelect = $("#cursoSelect");
+  for (const campusNome of Object.keys(cursosPorCampus)) {
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = campusNome;
+    cursoSelect.appendChild(optgroup);
+    for (const curso of cursosPorCampus[campusNome]) {
+      const option = document.createElement("option");
+      option.value = curso.cursoId;
+      option.innerText = curso.cursoNome;
+      optgroup.appendChild(option);
+    }
+  }
+
+  cursoSelect.addEventListener("change", () => {
+    document.querySelector("#campusIndicator").innerText = "Campus: " + cursos.find(c => c.cursoId == cursoSelect.value).campusNome.toUpperCase();
+  });
 </script>
 
 <?php echo file_get_contents(__DIR__ . "/_partials/footer.html") ?>

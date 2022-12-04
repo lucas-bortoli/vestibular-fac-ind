@@ -130,7 +130,7 @@ a:active {
   overflow: hidden;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
 }
 
 .split-pane .pane {
@@ -269,12 +269,24 @@ button.register .icon {
   right: 16px;
 }
 
+button.login {
+  color: white;
+  background-color: #ea8962;
+  width: 100%;
+  position: relative;
+}
+
+button.login .icon {
+  position: absolute;
+  right: 16px;
+}
+
 button.goToLogin {
   background-color: #403f82;
   color: white;
   border: 1px solid white;
   position: relative;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 button.goToLogin .icon {
@@ -367,7 +379,7 @@ select {
   background-image: url("/assets/ExpandDown.svg");
   background-repeat: no-repeat;
   background-size: 1em;
-  background-position: calc(100% - 1em) calc(50% + 2px);
+  background-position: calc(100% - 16px) calc(50% + 2px);
 }
 
 .socialMediaIcons {
@@ -432,6 +444,7 @@ select {
   box-sizing: content-box;
   margin-right: 0.75rem;
   border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .sidebar-pane .item {
@@ -443,6 +456,7 @@ select {
   display: flex;
   flex-direction: row;
   align-items: center;
+  user-select: none;
 }
 
 .sidebar-pane .item:hover {
@@ -455,6 +469,13 @@ select {
 
 .sidebar-pane .item .icon {
   margin-right: 12px;
+}
+
+.sidebar-pane .item.disabled {
+  opacity: 0.5;
+  background-color: transparent !important;
+  pointer-events: none;
+  text-shadow: 1px 1px #000;
 }
 
 .sidebar-pane .header .user-name {

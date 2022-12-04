@@ -26,6 +26,15 @@ class CursoModel
     public int $duracao;
 }
 
+class CampusCursoModel
+{
+    public int $cursoId;
+    public string $cursoNome;
+    public int $cursoDuracao;
+    public int $campusId;
+    public string $campusNome;
+}
+
 class CursoController
 {
     protected PDO $db;
@@ -82,22 +91,33 @@ class CursoController
     }
 
     /**
-     * Lista todos os cursos.
-     * @return CursoModel[]
+     * Lista todos os cursos, com seus campus incluidos.
+     * @return CampusCursoModel[]
      */
-    function listAll()
+    function listAllWithCampus()
     {
         $list = [];
-        $stmt = $this->db->query("SELECT * FROM curso");
+        $stmt = $this->db->query("
+        SELECT
+            curso.id as 'cursoId',
+            curso.nome as 'cursoNome',
+            curso.duracao as 'cursoDuracao',
+            campus.id as 'campusId',
+            campus.nome as 'campusNome'
+        FROM curso
+            INNER JOIN campus ON curso.campusId = campus.id;");
+
+        $stmt->execute();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $model = new CursoModel();
+            $model = new CampusCursoModel();
 
             // Popular dados do modelo com a linha retornada pelo banco
-            $model->id = $row["id"];
-            $model->nome = $row["nome"];
+            $model->cursoId = $row["cursoId"];
+            $model->cursoNome = $row["cursoNome"];
+            $model->cursoDuracao = $row["cursoDuracao"];
             $model->campusId = $row["campusId"];
-            $model->duracao = $row["duracao"];
+            $model->campusNome = $row["campusNome"];
 
             array_push($list, $model);
         }

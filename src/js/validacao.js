@@ -25,4 +25,13 @@ Validacao = {
     });
     return result;
   },
+
+  /**
+   * Verifica se uma data é válida.
+   * @param {any} d 
+   * @returns Se falso, o objeto não é uma data ou é uma data inválida.
+   */
+  dateIsValid(d) {
+    return d instanceof Date && !isNaN(d);
+  }
 };

@@ -34,6 +34,11 @@ class ParticipanteModel
      * Curso que o participante está inscrito
      */
     public int $cursoId;
+
+    /**
+     * Modalidade de prova que o candidato está inscrito
+     */
+    public bool $provaOnline;
 }
 
 class ParticipanteController
@@ -55,6 +60,7 @@ class ParticipanteController
                 documento VARCHAR(64) UNIQUE NOT NULL,
                 nascimento DATE NOT NULL,
                 cursoId INTEGER NOT NULL,
+                provaOnline BOOLEAN NOT NULL,
                 FOREIGN KEY (cursoId) REFERENCES curso (id)
             );
         ");
@@ -68,7 +74,7 @@ class ParticipanteController
     {
         if ($this->db->beginTransaction()) {
             $stmt = $this->db->prepare("
-                INSERT INTO participante (nome, email, documento, nascimento, cursoId) VALUES (:nome, :email, :documento, :nascimento, :cursoId);
+                INSERT INTO participante (nome, email, documento, nascimento, cursoId, provaOnline) VALUES (:nome, :email, :documento, :nascimento, :cursoId, :provaOnline);
             ");
 
             $stmt->bindValue(":nome", $model->nome);
@@ -76,6 +82,7 @@ class ParticipanteController
             $stmt->bindValue(":documento", $model->documento);
             $stmt->bindValue(":nascimento", $model->dataNascimento);
             $stmt->bindValue(":cursoId", $model->cursoId);
+            $stmt->bindValue(":provaOnline", $model->provaOnline);
 
             if ($stmt->execute()) {
                 // Salvar dados no banco definitivamente
@@ -112,13 +119,14 @@ class ParticipanteController
     }
 
     /**
-     * Lista todos os participantes.
-     * @return ParticipanteModel[]
+     * Retorna um participante a partir de seu id
      */
-    function listAll()
-    {
-        $list = [];
-        $stmt = $this->db->query("SELECT * FROM participante");
+    function getById(int $participanteId): ParticipanteModel|null {
+        $stmt = $this->db->query("SELECT * FROM participante WHERE id = :id");
+
+        $stmt->bindValue(":id", $participanteId, PDO::PARAM_INT);
+
+        $stmt->execute();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $model = new ParticipanteModel();
@@ -130,6 +138,54 @@ class ParticipanteController
             $model->documento = $row["documento"];
             $model->dataNascimento = $row["nascimento"];
             $model->cursoId = $row["cursoId"];
+            $model->provaOnline = $row["provaOnline"];
+
+            return $model;
+        }
+
+        return null;
+    }
+
+    function login(string $documento, string $dataNascimento): int|null {
+        $stmt = $this->db->query("SELECT * FROM participante WHERE documento = :doc AND nascimento = :data;");
+
+        $stmt->bindValue(":doc", $documento, PDO::PARAM_STR);
+        $stmt->bindValue(":data", $dataNascimento, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            // Se estamos dentro do loop, então o login funcionou: a condição acima foi verdadeira
+            // Retornar código do participante
+            return $row["id"];
+        }
+
+        // Falha no login
+        return null;
+    }
+
+    /**
+     * Lista todos os participantes.
+     * @return ParticipanteModel[]
+     */
+    function listAll()
+    {
+        $list = [];
+        $stmt = $this->db->query("SELECT * FROM participante");
+
+        $stmt->execute();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $model = new ParticipanteModel();
+
+            // Popular dados do modelo com a linha retornada pelo banco
+            $model->id = $row["id"];
+            $model->nome = $row["nome"];
+            $model->email = $row["email"];
+            $model->documento = $row["documento"];
+            $model->dataNascimento = $row["nascimento"];
+            $model->cursoId = $row["cursoId"];
+            $model->provaOnline = $row["provaOnline"];
 
             array_push($list, $model);
         }

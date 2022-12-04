@@ -68,6 +68,29 @@ class CampusController
     }
 
     /**
+     * Retorna um campus a partir de seu id
+     * @return CampusModel
+     */
+    function getById(int $campusId): CampusModel|null {
+        $stmt = $this->db->query("SELECT * FROM campus WHERE id = :id");
+
+        $stmt->bindValue(":id", $campusId);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $model = new CampusModel();
+
+            // Popular dados do modelo com a linha retornada pelo banco
+            $model->id = $row["id"];
+            $model->nome = $row["nome"];
+
+            return $model;
+        }
+
+        return null;
+    }
+
+    /**
      * Lista todos os campi.
      * @return CampusModel[]
      */
@@ -75,6 +98,7 @@ class CampusController
     {
         $list = [];
         $stmt = $this->db->query("SELECT * FROM campus");
+        $stmt->execute();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $model = new CampusModel();

@@ -1,9 +1,8 @@
 <?php
 
 // Destruir a sessão, se existir
-if (isset($_SESSION)) {
-    session_destroy();
-}
+session_start();
+session_destroy();
 
 // Redirecionar a página principal
 header("Location: /");
