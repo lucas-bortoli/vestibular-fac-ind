@@ -45,6 +45,7 @@ $participante->documento = $cpf;
 $participante->dataNascimento = $dataNascimento;
 $participante->email = $email;
 $participante->cursoId = $curso;
+$participante->provaOnline = $modalidade == "online";
 
 try {
     $userId = $participanteController->add($participante);
