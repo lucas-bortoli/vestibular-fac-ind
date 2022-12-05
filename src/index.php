@@ -323,6 +323,7 @@ switch (error) {
   cursoSelect.addEventListener("change", () => {
     document.querySelector("#campusIndicator").innerText = "Campus: " + cursos.find(c => c.cursoId == cursoSelect.value).campusNome.toUpperCase();
   });
+  document.querySelector("#campusIndicator").innerText = "Campus: " + cursos.find(c => c.cursoId == cursoSelect.value).campusNome.toUpperCase();
 </script>
 
 <?php echo file_get_contents(__DIR__ . "/_partials/footer.html") ?>

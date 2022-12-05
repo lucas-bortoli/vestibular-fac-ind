@@ -54,6 +54,11 @@ try {
     
     $_SESSION["userId"] = $userId;
 
+    require_once(__DIR__ . "/../_email/mailer.php");
+
+    $mail = new Mailer($participante->email);
+    $mail->sendRegisterConfirmation($participante->nome);
+
     header("Location: /participante?registerOk");
 } catch (\Exception $th) {
     http_response_code(400);

@@ -1,14 +1,20 @@
 # Setup aplicação
-- Instalar Docker;
-- Criar a imagem da aplicação:
-    ```sh
-    docker build -t vestibular .
-    ```
-- Executar aplicação:
-    ```sh
-    docker run -d -p 80:80 vestibular
-    ```
-    Esse comando executa a aplicação. O parâmetro `-p 80:80` mapeia a porta do container para a porta do host, assim deixando acessível seu servidor externalmente.
+## Instalar Docker;
+Faça a instalação do Docker seguindo as instruções oficiais.
+
+## Criar a imagem da aplicação:
+```sh
+docker build -t vestibular .
+```
+## Variáveis de ambiente
+O sistema exige algumas variáveis de ambiente configuradas para funcionar corretamente, com destaque ao sistema de e-mails. De modo geral, as variáveis exemplificadas no arquivo `.env.example` devem estar presentes no container da aplicação.
+
+## Executar aplicação
+```sh
+docker run -d --env-file ./.env -p 80:80 vestibular
+```
+
+Esse comando executa a aplicação. O parâmetro `-p 80:80` mapeia a porta do container para a porta do host, assim deixando acessível seu servidor externalmente. O parâmetro `--env-file` especifica um arquivo que contém as variáveis de ambiente configuradas, segundo a seção [Variáveis de ambiente](#variáveis-de-ambiente).
 
 # Persistência de dados
 A aplicação faz o controle da persistência do banco de dados através do volume `/data`, acessível pelo container. Seu banco de dados é armazenado em `/data/database.sqlite`.
