@@ -386,6 +386,7 @@ select {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-bottom: 4rem;
 }
 
 .socialMediaIcons .icon {

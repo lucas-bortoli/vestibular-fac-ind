@@ -272,6 +272,15 @@ switch (error) {
       message: "Você já está cadastrado neste processo seletivo.",
     });
     break;
+  case "loginAuthError":
+    Dialog.show({
+      icon: "error",
+      hideCloseButton: true,
+      title: "Login falhou",
+      message: "Verifique se os dados digitados estão corretos.",
+    });
+    $(".goToSubscription").click();
+    break;
 }
 </script>
 

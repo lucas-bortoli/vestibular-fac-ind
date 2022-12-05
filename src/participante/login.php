@@ -11,7 +11,7 @@ $dataNascimento = $_POST["dataNascimento"];
 // Verificar se parâmetros não existem
 if (!isset($cpf, $dataNascimento)) {
     http_response_code(401);
-    header("Location: /?error=authError1");
+    header("Location: /?error=loginAuthError");
     die();
 }
 
@@ -20,7 +20,7 @@ $cpf = str_replace([".", "-", " "], "", $cpf);
 
 if (strlen($cpf) != 11) {
     http_response_code(401);
-    header("Location: /?error=authError2");
+    header("Location: /?error=loginAuthError");
     die();
 }
 
@@ -33,7 +33,7 @@ $userId = $participanteController->login($cpf, $dataNascimento);
 // Verificar se autenticação falhou ($userId == null)
 if (!isset($userId)) {
     http_response_code(401);
-    header("Location: /?error=authError3");
+    header("Location: /?error=loginAuthError");
     die();
 }
 
