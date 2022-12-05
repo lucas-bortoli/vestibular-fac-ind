@@ -1,10 +1,10 @@
 ![Screenshot da página de participante](https://i.imgur.com/E4N0bZ2.png)
 
 # Setup aplicação
-## Instalar Docker;
+## Instalar Docker
 Faça a instalação do Docker seguindo as instruções oficiais.
 
-## Criar a imagem da aplicação:
+## Criar a imagem da aplicação
 ```sh
 docker build -t vestibular .
 ```
