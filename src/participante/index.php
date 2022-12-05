@@ -31,14 +31,22 @@ echo file_get_contents(__DIR__ . "/../_partials/header.html");
 <main class="main">
   <section class="split-pane participante">
     <div class="pane multiview-pane">
-
+    <?php
+      // Alterar a página renderizada aqui conforme o parâmetro da URL
+      switch ($_GET["page"]) {
+        case "profile":
+        default:
+          include(__DIR__ . "/_partials/profile.php");
+          break;
+      }
+    ?>
     </div>
     <div class="pane sidebar-pane">
       <div class="header">
         <i class="icon icon-2x user"></i>
         <span class="user-name"><?php echo htmlspecialchars($participante->nome) ?></span>
       </div>
-      <a href="?page=info" class="item">
+      <a href="?page=profile" class="item">
         <i class="icon user-white"></i>
         Meu perfil
       </a>
