@@ -1,3 +1,5 @@
+![Screenshot da página de participante](https://i.imgur.com/E4N0bZ2.png)
+
 # Setup aplicação
 ## Instalar Docker;
 Faça a instalação do Docker seguindo as instruções oficiais.
