@@ -8,15 +8,15 @@ Faça a instalação do Docker seguindo as instruções oficiais.
 ```sh
 docker build -t vestibular .
 ```
-## Variáveis de ambiente
-O sistema exige algumas variáveis de ambiente configuradas para funcionar corretamente, com destaque ao sistema de e-mails. De modo geral, as variáveis exemplificadas no arquivo `.env.example` devem estar presentes no container da aplicação.
+## Credenciais
+O sistema exige algumas Credenciais configuradas para funcionar corretamente, com destaque ao sistema de e-mails. De modo geral, as variáveis exemplificadas no código SQL a seguir devem estar presentes no banco de dados da aplicação.
 
 ## Executar aplicação
 ```sh
-docker run -d --name vestibular --env-file ./.env -p 80:80 vestibular
+docker run -d --name vestibular -p 80:80 vestibular
 ```
 
-Esse comando executa a aplicação. O parâmetro `-p 80:80` mapeia a porta do container para a porta do host, assim deixando acessível seu servidor externalmente. O parâmetro `--env-file` especifica um arquivo que contém as variáveis de ambiente configuradas, segundo a seção [Variáveis de ambiente](#variáveis-de-ambiente).
+Esse comando executa a aplicação. O parâmetro `-p 80:80` mapeia a porta do container para a porta do host, assim deixando acessível seu servidor externalmente.
 
 # Persistência de dados
 A aplicação faz o controle da persistência do banco de dados através do volume `/data`, acessível pelo container. Seu banco de dados é armazenado em `/data/database.sqlite`.
@@ -59,4 +59,14 @@ A aplicação faz o controle da persistência do banco de dados através do volu
         (4, 'Logística', 2),
         (4, 'Pedagogia', 4),
         (4, 'Sistemas de Informação', 4);
+
+    -- Exemplo de tabela configuração, mudar os placeholders
+    INSERT INTO config 
+	    (smtp_host, smtp_port, smtp_encryption_type, smtp_username, smtp_password, smtp_from_address) VALUES
+	    ('smtp-mail.outlook.com',
+        587,
+        'STARTTLS',
+        'xyz.abc234567890@sesisenaipr.org.br',
+        '1234567890password',
+        'xyz.abc234567890@sesisenaipr.org.br');
     ```
