@@ -135,8 +135,9 @@ a:active {
 
 .split-pane .pane {
   padding: 2rem;
-  height: 80vh;
-  max-height: 520px;
+  min-height: 50vh;
+  /*height: 80vh;
+  max-height: 520px;*/
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -489,6 +490,20 @@ select {
   flex-grow: 1;
 }
 
+::selection {
+  background: rgb(32, 32, 32);
+  color: rgb(200, 200, 200);
+}
+
+::-moz-selection {
+  background: rgb(32, 32, 32);
+  color: rgb(200, 200, 200);
+}
+
+button {
+  box-shadow: 0 1px 3px rgb(0 0 0 / 4%), 0 1px 2px rgb(0 0 0 / 10%);
+}
+
 @media screen and (max-width: 720px) {
   #menuPrincipal .branding {
     width: 100vw;
@@ -507,6 +522,7 @@ select {
   .split-pane .pane {
     max-height: none;
     height: unset;
+    min-height: unset;
     width: 100%;
   }
   

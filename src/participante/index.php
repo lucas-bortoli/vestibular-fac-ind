@@ -33,7 +33,16 @@ echo file_get_contents(__DIR__ . "/../_partials/header.html");
     <div class="pane multiview-pane">
     <?php
       // Alterar a página renderizada aqui conforme o parâmetro da URL
-      switch ($_GET["page"]) {
+      $page = "profile";
+
+      if (isset($_GET["page"])) {
+        $page = $_GET["page"];
+      }
+
+      switch ($page) {
+        case "provaOnline":
+          include(__DIR__ . "/_partials/provaOnline.php");
+          break;
         case "profile":
         default:
           include(__DIR__ . "/_partials/profile.php");

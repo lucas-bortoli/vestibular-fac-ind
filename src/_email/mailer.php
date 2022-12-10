@@ -1,8 +1,10 @@
 <?php
+use Database\ConfigController;
 
 require_once("../phpmailer/src/Exception.php");
 require_once("../phpmailer/src/PHPMailer.php");
 require_once("../phpmailer/src/SMTP.php");
+require_once("../_db/database.php");
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -14,15 +16,19 @@ class Mailer {
 
   function __construct($targetEmail)
   {
+    global $pdo;
+    $configController = new ConfigController($pdo);
+    $config = $configController->get();
+    
     $mailer = new PHPMailer(true);
 
     $mailer->isSMTP();
     
     $mailer->SMTPDebug = SMTP::DEBUG_OFF;
-    $mailer->Host = $_ENV["SMTP_HOST"];
-    $mailer->Port = $_ENV["SMTP_PORT"];
+    $mailer->Host = $config->smtp_host;
+    $mailer->Port = $config->smtp_port;
     
-    switch ($_ENV["SMTP_ENCRYPTION_TYPE"]) {
+    switch ($config->smtp_encryption_type) {
         case "SMTPS":
             $mailer->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             break;
@@ -31,10 +37,11 @@ class Mailer {
     }
     
     $mailer->SMTPAuth = true;
-    $mailer->Username = $_ENV["SMTP_USERNAME"];
-    $mailer->Password = $_ENV["SMTP_PASSWORD"];
+    $mailer->Username = $config->smtp_username;
+    $mailer->Password = $config->smtp_password;
     $mailer->CharSet = "UTF-8";
-    $mailer->setFrom($_ENV["SMTP_FROM_ADDRESS"]);
+    
+    $mailer->setFrom($config->smtp_from_address);
     $mailer->addAddress($targetEmail);
 
     $this->mailer = $mailer;

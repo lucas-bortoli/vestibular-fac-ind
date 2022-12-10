@@ -13,7 +13,7 @@ O sistema exige algumas variáveis de ambiente configuradas para funcionar corre
 
 ## Executar aplicação
 ```sh
-docker run -d --env-file ./.env -p 80:80 vestibular
+docker run -d --name vestibular --env-file ./.env -p 80:80 vestibular
 ```
 
 Esse comando executa a aplicação. O parâmetro `-p 80:80` mapeia a porta do container para a porta do host, assim deixando acessível seu servidor externalmente. O parâmetro `--env-file` especifica um arquivo que contém as variáveis de ambiente configuradas, segundo a seção [Variáveis de ambiente](#variáveis-de-ambiente).
