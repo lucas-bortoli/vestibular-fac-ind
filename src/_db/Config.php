@@ -11,6 +11,21 @@ class ConfigModel
     public string $smtp_username;
     public string $smtp_password;
     public string $smtp_from_address;
+
+    /**
+     * Timestamp unix do início da prova online
+     */
+    public int $processo_seletivo_inicio_timestamp;
+    
+    /**
+     * Timestamp unix do fim da prova online
+     */
+    public int $processo_seletivo_fim_timestamp;
+
+    /**
+     * Descrição em HTML do processo seletivo, mostrado em /index.php
+     */
+    public string $processo_seletivo_descricao;
 }
 
 class ConfigController
@@ -31,7 +46,10 @@ class ConfigController
                 smtp_encryption_type TEXT NOT NULL,
                 smtp_username TEXT NOT NULL,
                 smtp_password TEXT NOT NULL,
-                smtp_from_address TEXT NOT NULL
+                smtp_from_address TEXT NOT NULL,
+                processo_seletivo_inicio_timestamp INTEGER NOT NULL,
+                processo_seletivo_fim_timestamp INTEGER NOT NULL,
+                processo_seletivo_descricao TEXT NOT NULL
             );
         ");
     }
@@ -55,6 +73,9 @@ class ConfigController
             $model->smtp_username = $row["smtp_username"];
             $model->smtp_password = $row["smtp_password"];
             $model->smtp_from_address = $row["smtp_from_address"];
+            $model->processo_seletivo_descricao = $row["processo_seletivo_descricao"];
+            $model->processo_seletivo_inicio_timestamp = $row["processo_seletivo_inicio_timestamp"];
+            $model->processo_seletivo_fim_timestamp = $row["processo_seletivo_fim_timestamp"];
         }
 
         return $model;

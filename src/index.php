@@ -1,7 +1,13 @@
 <?php
 use Database\CursoController;
+use Database\ConfigController;
 
-echo file_get_contents(__DIR__ . "/_partials/header.html")
+echo file_get_contents(__DIR__ . "/_partials/header.html");
+
+require_once "./_db/database.php";
+
+$configController = new ConfigController($pdo);
+$config = $configController->get();
 ?>
 
 <main class="main">
@@ -9,24 +15,22 @@ echo file_get_contents(__DIR__ . "/_partials/header.html")
     <div class="pane info-pane">
       <div class="info">
         <h2>Informações</h2>
-        <p>
-          Bem-vindo ao portal de inscrição do processo seletivo das Faculdades da Indústria!
-          Solicitamos atenção na leitura destas informações e do Edital antes de realizar sua
-          inscrição para ciência de todas as regras e disposições que regem o presente processo
-          seletivo.
-        </p>
-        <p>
-          A prova online - eletrônica consiste na realização de redação obedecendo o tema proposto,
-          levando em consideração o domínio da língua e argumentos coerentes com a proposta. Esta
-          prova poderá ser realizada logo após a inscrição do usuário ou até o dia 17/03/23 (desde
-          que haja vagas disponíveis), com a senha enviada no e-mail de inscrição. Usamos cookies e
-          outras tecnologias semelhantes para melhorar a sua experiência em nosso site. Ao realizar
-          a sua inscrição, você concorda com a nossa a nossa Política de Privacidade.
-        </p>
+        <?php
+          if (isset($config->processo_seletivo_descricao)) {
+            // Filtrar o html aqui (trocar Calibri para a fonte da página)
+            $desc = preg_replace("/calibri/mi", "inherit", $config->processo_seletivo_descricao);
 
-        <ul>
-          <li>Lista</li>
-        </ul>
+            // Remover atributos width
+            $desc = preg_replace("/width=\"\d+\"/mi", "", $desc);
+
+            // Remover scripts
+            $desc = preg_replace("/<\s*script/mi", "<x-script", $desc);
+
+            echo $desc;
+          } else {
+            echo "Não há informações para este processo seletivo.";
+          }
+        ?>
       </div>
 
       <div class="attachments">

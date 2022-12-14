@@ -59,7 +59,7 @@ echo file_get_contents(__DIR__ . "/../_partials/header.html");
         <i class="icon user-white"></i>
         Meu perfil
       </a>
-      <a href="?page=prova-online" class="item <?php echo $participante->provaOnline == true ? "" : "disabled" ?>">
+      <a href="?page=provaOnline" class="item <?php echo $participante->provaOnline == true ? "" : "disabled" ?>">
         <i class="icon prova"></i>
         Prova online
       </a>
